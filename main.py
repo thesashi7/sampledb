@@ -137,8 +137,8 @@ def updateArtist():
     print "Updating Artist"
     aname = raw_input("Enter the name of the artist : ")
     style = raw_input("Enter the updated style:")
-    
-    ## CALL UPDATE    
+
+    ## CALL UPDATE
     cursor.execute("UPDATE ARTIST SET style=%s WHERE AName=%s", (style, aname))
     connection.commit()
 
@@ -151,7 +151,7 @@ def getArtists():
     results = cursor.fetchall()
     for r in results:
         print "Artist Name: " + r[0] + "\nBirthplace: " + r[1] + "\nAge: " + str(r[2]) + "\nStyle: " + r[3]
-
+        print "\n"
 
 def getCustomers():
     query = "SELECT * FROM CUSTOMER"
@@ -161,7 +161,7 @@ def getCustomers():
     results = cursor.fetchall()
     for r in results:
         print "Customer ID: " + str(r[0]) + "\nCustomer Name: " + r[1] + "\nAddress: " + r[2] + "\nAmount: " + str(r[3])
-
+        print "\n"
 
 def getArtworks():
     query = "SELECT * FROM ARTWORK"
@@ -171,7 +171,7 @@ def getArtworks():
     results = cursor.fetchall()
     for r in results:
         print "Title: " + r[0] + "\nYear: " + str(r[1]) + "\nType: " + r[2] + "\nPrice: " + str(r[3]) + "\nAName: " + r[4]
-
+        print "\n"
 
 def getGroups():
     query = "SELECT * FROM GROUPS"
@@ -181,6 +181,7 @@ def getGroups():
     results = cursor.fetchall()
     for r in results:
         print "Group Name: " + r[0]
+        print "\n"
 
 
 def getClassifies():
@@ -191,6 +192,7 @@ def getClassifies():
     results = cursor.fetchall()
     for r in results:
         print "Title: " + r[0] + "\nGroup Name: " + r[1]
+        print "\n"
 
 
 def getLikeGroups():
@@ -201,6 +203,7 @@ def getLikeGroups():
     results = cursor.fetchall()
     for r in results:
         print "Customer ID: " + str(r[0]) + "\nGroup Name: " + r[1]
+        print "\n"
 
 
 def getLikeArtists():
@@ -236,7 +239,13 @@ def artwork():
     aname = raw_input("Enter artist name: ")
     gname = tp
     addArtwork(title, year, tp, price, aname)
-    
+
+    # CHECK IF ARTIST EXISTS
+    cursor.execute("SELECT AName FROM ARTIST WHERE AName=%s", (aname,))
+    count = cursor.rowcount
+    if count == 0:
+        print "Artist is not found \n"
+        artist()
     # CHECK IF THE GROUP EXISTS
     cursor.execute("SELECT GName FROM GROUPS WHERE GName=%s", (gname,))
     count = cursor.rowcount
@@ -249,23 +258,23 @@ def groupLike():
     custId = raw_input("Enter customer Id: ")
     gname = raw_input("Enter group name: ")
     cursor.execute("SELECT Title FROM CLASSIFY WHERE GName=%s", (gname,))
-    
+
     # FIRST GET ALL OF THE TITLES
     titles = cursor.fetchall()
     for title in titles:
         cursor.execute("SELECT AName FROM ARTWORK WHERE Title=%s", (title,))
-        
+
         # THEN GET ALL OF THE ANAMES
         anames = cursor.fetchall()
         for aname in anames:
             # ADD TO LIKE_ARTIST TABLE
             addLikeArtist(custId, aname)
-            
+
     # FINALLY, ADD TO LIKE_GROUP TABLE
     addLikeGroup(custId, gname)
 
 def retreive():
-    print "\\tRetrieving records"
+    print "\tRetrieving records"
     print "\tEnter 1 to retrieve all Artists"
     print "\tEnter 2 to retrieve all Customers"
     print "\tEnter 3 to retrieve all Artwork"
@@ -318,17 +327,17 @@ def testAll():
     createTables()
     addArtist("Artist One", "San Diego, CA", 24, "Nonfiction")
     addCustomer("Customer One", "123 Main St, San Diego, CA", 65)
-    
+
     # ADD ARTWORK WHICH SHOULD ADD GROUP AND CLASSIFY
     artwork() ## USE THESE VALUES: Title, 2017, Autobiography, 65, Artist One
-    
+
     # ADD LIKE_GROUP WHICH SHOULD ADD LIKE_ARTIST
     groupLike() ## USE THESE VALUES: 1, Autobiography
-    
+
     getArtists() ## SHOULD RETURN: Artist One, San Diego, CA, 24, Nonfiction
-    
+
     updateArtist() ## USE THESE VALUES: Artist One, Fiction
-    
+
     getArtists() ## SHOULD RETURN: Artist One, San Diego, CA, 24, Fiction
 
     getCustomers() ## SHOULD RETURN: 1, Customer One, 123 Main St, San Diego, CA, 65
@@ -336,11 +345,11 @@ def testAll():
     getLikeGroups() ## SHOULD RETURN: 1, Autobiography
     getLikeArtists() ## SHOULD RETURN 1, Artist One
     getClassifies() ## SHOULD RETURN Title, Autobiography
-   
+
 
 
 def main():
-    deleteTables()
+    #deleteTables()
     createTables()
     promptUserInput()
 
