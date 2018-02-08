@@ -1,3 +1,8 @@
+REQUIRED SOFTWARE:
+1. MySQL
+2. Python 2.7
+3. MySQLdb for Python
+
 To use the MySQL from Python, please make sure the you have started the MySQL server. For example, on a Mac, the command is “mysql.server start”.
 
 We are using the following defaults for our MySQL Server:
