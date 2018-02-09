@@ -5,13 +5,7 @@ REQUIRED SOFTWARE:
 
 To use the MySQL from Python, please make sure the you have started the MySQL server. For example, on a Mac, the command is “mysql.server start”.
 
-We are using the following defaults for our MySQL Server:
-host=“localhost”
-user=“root”
-passwd=“password”
-
-mysql -u root -h localhost -p
-ENTER PASSWORD: password
+PLEASE ENTER YOUR MYSQL INFORMATION INTO LINE 5 OF main.py! This is how we connect to MySQL.
 
 Running main.py should work from there.
 
